@@ -13,7 +13,7 @@ class permission
 	function __toString() {
 		return $u.$p;
 	}
-
+/*
 	function is_teacher() {
 		$teacher = false;
         
@@ -49,6 +49,87 @@ class permission
         }
         return $student;
     }
+*/
+	function connect_to_mssql() {
+		$serverName = "LAPTOP-3GJTBRSD\DBS401NHOM2";
+		$database = "DBS_IA1601_GROUP2";
+		$uid = "sa";
+		$pass = "24062001";
+		$connectionOptions = [
+			"Database" => $database,
+			"Uid" => $uid,
+			"PWD" => $pass
+		];
+		$conn = sqlsrv_connect($serverName, $connectionOptions);
+		if ($conn === false) {
+			die(print_r(sqlsrv_errors(), true));
+		}
+		return $conn;
+	}
+
+	function is_teacher() {
+		 $teacher = false;
+
+		// $serverName = "LAPTOP-3GJTBRSD\DBS401NHOM2";
+		// $database ="DBS_IA1601_GROUP2";
+		// $uid = "sa";
+		// $pass ="24062001";
+
+		// $connection =[
+		// "Database" => $database,
+		// "Uid" => $uid,
+		// "PWD" => $pass
+		// ];
+
+		// $conn =sqlsrv_connect($serverName,$connection);
+		$conn= $this->connect_to_mssql();
+		$user = $this->username;
+		$pass = $this->password;
+		$tsql = "SELECT * FROM teacher WHERE username = ? AND password = ?";
+		$params = array($user, $pass);
+		$stmt = sqlsrv_query($conn, $tsql, $params);
+		if ($stmt === false) {
+			die(print_r(sqlsrv_errors(), true));
+		}
+		if (sqlsrv_fetch($stmt) === true) {
+			$teacher = true;
+		}
+		sqlsrv_free_stmt($stmt);
+		sqlsrv_close($conn);
+		return $teacher;
+	}
+
+	function is_student() {
+		 $student = false;
+		// $serverName = "LAPTOP-3GJTBRSD\DBS401NHOM2";
+		// $database ="DBS_IA1601_GROUP2";
+		// $uid = "sa";
+		// $pass ="24062001";
+
+		// $connection =[
+		// "Database" => $database,
+		// "Uid" => $uid,
+		// "PWD" => $pass
+		// ];
+
+		// $conn =sqlsrv_connect($serverName,$connection);
+		$conn= $this->connect_to_mssql();
+		$user = $this->username;
+		$pass = $this->password;
+		$tsql = "SELECT * FROM student WHERE username = ? AND password = ?";
+		$params = array($user, $pass);
+		$stmt = sqlsrv_query($conn, $tsql, $params);
+		if ($stmt === false) {
+			die(print_r(sqlsrv_errors(), true));
+		}
+		if (sqlsrv_fetch($stmt) === true) {
+			$student = true;
+		}
+		sqlsrv_free_stmt($stmt);
+		sqlsrv_close($conn);
+		return $student;
+	}
+
 }
 
 ?>
