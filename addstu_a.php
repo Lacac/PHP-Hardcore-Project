@@ -23,27 +23,42 @@ else if(!preg_match("/^[0-9]{10}$/",$_POST['phonenum'])){
     header('Location: addstu.php?phone=error');
 }
 else{
-    $con5 = new mysqli("localhost","kali","kali","class");
-    if ($con5->connect_error) {
-        die("Connection failed: " . $con5->connect_error);
-    } 
-    $stmt = $con5->prepare("SELECT * FROM student WHERE username=?");
-    $stmt->bind_param("s", $_POST['username']);
-    $stmt->execute();
-    if($stmt->fetch() == 1){
-        header('Location: addstu.php?status=failed');
+    // $con5 = new mysqli("localhost","kali","kali","class");
+    // if ($con5->connect_error) {
+    //     die("Connection failed: " . $con5->connect_error);
+    // } 
+    require_once 'permission.php';
+    $u = "your_username";
+    $p = "your_password";
+    $permission = new Permission($u, $p);
+    $con5 = $permission->connect_to_mssql();
+    
+    $stmt = sqlsrv_prepare($con5, "SELECT * FROM student WHERE username=?", array(&$_POST['username']));
+    if (!$stmt) {
+        die(print_r(sqlsrv_errors(), true));
     }
-    else{
-        $con6 = new mysqli("localhost","kali","kali","class");
-        $stmt1 = $con6->prepare('INSERT INTO student (username,password,fullname,email,phonenum) VALUES (?,?,?,?,?)');
-        $stmt1->bind_param("sssss", $_POST['username'],$_POST['pass'],$_POST['fullname'],$_POST['email'],$_POST['phonenum']);
-        $con7 = new mysqli("localhost","kali","kali","message");
-        $sql = "CREATE TABLE `$_POST[username]` (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, sender VARCHAR(30) NOT NULL, content VARCHAR(10000) NOT NULL)";
-        if($stmt1->execute() && $con7->query($sql)){    // 
-            header('Location: addstu.php?status=success');
+    
+    if (sqlsrv_execute($stmt)) {
+        if (sqlsrv_fetch($stmt) === true) {
+            header('Location: addstu.php?status=failed');
+            exit();
         } else {
-            echo "Failed";
+            $permission1 = new Permission($u, $p);
+            $con6 = $permission1->connect_to_mssql();
+            $stmt1 = sqlsrv_prepare($con6, 'INSERT INTO student (username,password,fullname,email,phonenum) VALUES (?,?,?,?,?)', array(&$_POST['username'], &$_POST['pass'], &$_POST['fullname'], &$_POST['email'], &$_POST['phonenum']));
+            
+            $permission2 = new Permission($u, $p);
+            $con7 = $permission2->connect_to_mssql();
+            $sql = "CREATE TABLE ".$_POST['username']." (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, sender VARCHAR(30) NOT NULL, content VARCHAR(10000) NOT NULL)";
+            if (sqlsrv_execute($stmt1) && sqlsrv_query($con7, $sql)) {
+                header('Location: addstu.php?status=success');
+                exit();
+            } else {
+                echo "Failed";
+            }
         }
     }
+    sqlsrv_free_stmt($stmt);
+   
 } 
 ?>

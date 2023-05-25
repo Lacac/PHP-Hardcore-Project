@@ -34,15 +34,20 @@
                <th>Email</th>
                <th>Phone number</th>
            </tr>
-           <?php            
-                $con3 = new mysqli("localhost","kali","kali","class");
-                if ($con3->connect_error) {
-                  die("Connection failed: " . $con3->connect_error);
-                }
+           <?php    
+                
+                require 'permission.php';
+                $u = "your_username";
+                $p = "your_password";   
+                $permission = new permission($u,$p);
+                $conn = $permission->connect_to_mssql();
                 $sql = "SELECT id, fullname, email, phonenum FROM student";
-                $result = $con3->query($sql);
-                if($result->num_rows > 0){
-                    while($row = $result->fetch_assoc()){
+                $result = sqlsrv_query($conn, $sql);
+                if ($result === false) {
+                    die(print_r(sqlsrv_errors(), true));
+                }
+                if(sqlsrv_has_rows($result)){
+                    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)){
                         echo '<tr><td onclick="load_ajax(this)">'.$row["id"]."</td><td>".$row["fullname"]."</td><td>".$row["email"]."</td><td>".$row["phonenum"]."</td></tr>";
                     }
                 } else{

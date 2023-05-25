@@ -39,20 +39,30 @@
         <th>Content</th>
     </tr>
     <?php
-       $con10 = new mysqli("localhost","kali","kali","message");
-       if ($con10->connect_error) {
-           die("Connection failed: " . $con10->connect_error);
-       }
-       $sql = "SELECT * FROM ".$_SESSION['user']."";
-       $result = $con10->query($sql);
-       if($result->num_rows > 0){
-         while($rows = $result->fetch_assoc()){
-           echo "<tr><td>".$rows["id"]."</td><td>".$rows["sender"]."</td><td>".$rows["content"]."</td></tr>";
-           }
-       } 
-       else{
-           $msg = "Your box chat empty now!";
-       }
+    //    $con10 = new mysqli("localhost","kali","kali","message");
+    //    if ($con10->connect_error) {
+    //        die("Connection failed: " . $con10->connect_error);
+    //    }
+        require 'permission.php';
+        $u = "your_username";
+        $p = "your_password";   
+        $permission = new permission($u,$p);
+        $conn = $permission->connect_to_mssql();
+        $sql = "SELECT * FROM ".$_SESSION['user']."";
+        $result = sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            die(print_r(sqlsrv_errors(), true));
+        }
+
+        if (sqlsrv_has_rows($result)) {
+            while ($rows = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+                echo "<tr><td>".$rows["id"]."</td><td>".$rows["sender"]."</td><td>".$rows["content"]."</td></tr>";
+            }
+        } 
+        else{
+            $msg = "Your box chat empty now!";
+        }
     ?>
    <p style="color: red"><?php echo $msg;?></p>
 </table>

@@ -14,29 +14,43 @@ if(!isset($_SESSION['teacher']) || !$_SESSION['teacher']){
 <body>
     <?php
         if(isset($_POST['delete'])){
-            $con14 = new mysqli("localhost","kali","kali","class");
+            require 'permission.php';
+            $u = "your_username";
+            $p = "your_password";
+            $permission = new permission($u, $p);
+            $con14 = $permission->connect_to_mssql();
             $x = 0;
             $arr = array();
-            $stmt = $con14->prepare("SELECT * FROM student WHERE id=?");
-            $stmt->bind_param("s",$_SESSION['id']);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($row = $result->fetch_array(MYSQLI_NUM))
-            {
-                foreach ($row as $r)
-                {
-                    $arr[$x] = "$r";
-                    $x++;
+            $sql = "SELECT * FROM student WHERE id='" . $_SESSION['id'] . "'";
+            $result = sqlsrv_query($con14, $sql);
+            if ($result !== false) {
+                while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+                    foreach ($row as $r) {
+                        $arr[$x] = $r;
+                        $x++;
+                    }
                 }
+            } else {
+                $msg = "This profile is empty now!";
             }
-            $con15 = new mysqli("localhost","kali","kali","class");
-            $stmt1 = $con15->prepare("DELETE FROM student WHERE id=?");
-            $stmt1->bind_param("s",$_SESSION['id']);
-            $con16 = new mysqli("localhost","kali","kali","message");
-            $sql = "DROP TABLE `$arr[1]`";
+
+            // $permission1 = new permission($u, $p);
+            $con15 = $permission->connect_to_mssql();
+            $id = $_SESSION['id'];
+            $sql = "DELETE FROM student WHERE id='$id'";
+            $result = sqlsrv_query($con15, $sql);
+            if ($result !== false) {
+                echo'delete successful';
+            } else {
+                echo'delete successful';
+            }
+            // $permission2 = new permission($u, $p);
+            $con16 = $permission->connect_to_mssql(); 
+            $sql = "DROP TABLE [$arr[1]]";
             if($stmt1->execute() && $con16->query($sql)){    
                 $msg = "This student has been deleted!";
             }
+        
         }
     ?>
     <br/>

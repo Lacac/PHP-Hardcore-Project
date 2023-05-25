@@ -40,19 +40,23 @@
             $data = isset($_POST['td_data']) ? $_POST['td_data'] : '';
             $_SESSION['id'] = $data;
             // echo $data;
-            $con4 = new mysqli("localhost","kali","kali","class");
-            if ($con4->connect_error) {
-                die("Connection failed: " . $con4->connect_error);
-            }
-            $sql = "SELECT fullname, email, phonenum FROM student WHERE id='$data'";
-            $result = $con4->query($sql);
-            if($result->num_rows > 0){
-              while($rows = $result->fetch_assoc()){
-                echo "<tr><td>".$rows["fullname"]."</td><td>".$rows["email"]."</td><td>".$rows["phonenum"]."</td></tr>";
+            require 'permission.php';
+            $u = "your_username";
+            $p = "your_password";   
+            $permission = new permission($u,$p);
+            $conn = $permission->connect_to_mssql();
+            // $data = mysqli_real_escape_string($conn, $data); // Sử dụng hàm mysqli_real_escape_string() để bảo vệ chống lại các cuộc tấn công SQL injection
+            $sql = "SELECT fullname, email, phonenum FROM student WHERE id=?";
+            $stmt = sqlsrv_prepare($conn, $sql, array(&$data));
+            if (sqlsrv_execute($stmt)) {
+                $result = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+                if (!empty($result)) {
+                    echo "<tr><td>".$result["fullname"]."</td><td>".$result["email"]."</td><td>".$result["phonenum"]."</td></tr>";
+                } else {
+                    $msg = "This profile is empty now!";
                 }
-            } 
-            else{
-                $msg = "This profile is empty now!";
+            } else {
+                $msg = "Query execution failed!";
             }
             ?>
 </table>
