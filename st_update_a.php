@@ -1,35 +1,68 @@
 <?php
 session_start();
-if(!isset($_SESSION['student']) || !$_SESSION['student']){
+
+if (!isset($_SESSION['student']) || !$_SESSION['student']) {
   header('Location: login.php');
 }
-if(isset($_POST['submit'])){
-    if(hash_equals($_SESSION['csrf'],$_POST['csrf'])){
-        if(!preg_match("/^\s*[a-zA-Z0-9_]{5,30}\s*$/",$_POST['pass']))
-        { 
+
+if (isset($_POST['submit'])) {
+    if (hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
+        $password = $_POST['pass'];
+        $confirmPassword = $_POST['cpass'];
+        $email = $_POST['email'];
+        $phoneNumber = $_POST['phonenum'];
+
+        // Validate password
+        if (!preg_match("/^\s*[a-zA-Z0-9_]{5,30}\s*$/", $password)) { 
             header('Location: st_update.php?password=error');
+            exit();
         }
-        else if ($_POST['pass'] != $_POST['cpass']){   
+
+        // Confirm password
+        if ($password != $confirmPassword) {   
             header('Location: st_update.php?confirm=error');
+            exit();
         }
-        else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+
+        // Validate email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             header('Location: st_update.php?email=error');
+            exit();
         }
-        else if(!preg_match("/^[0-9]{10}$/",$_POST['phonenum'])){
+
+        // Validate phone number
+        if (!preg_match("/^[0-9]{10}$/", $phoneNumber)) {
             header('Location: st_update.php?phone=error');
+            exit();
         }
-        else{
-            $con13 = new mysqli("localhost","kali","kali","class");
-            $stmt = $con13->prepare('UPDATE student SET password=?, email=?, phonenum=? WHERE username=?');
-            $stmt->bind_param("ssss", $_POST['pass'],$_POST['email'],$_POST['phonenum'],$_SESSION['user']);
-            if($stmt->execute()){    
-                header('Location: st_update.php?status=success');
-            } else {
-                echo "Failed";
-            }
+
+        // Update the student's profile in the database
+        $serverName = "localhost";
+        $connectionOptions = array(
+            "Database" => "class",
+            "Uid" => "kali",
+            "PWD" => "kali"
+        );
+
+        $conn = sqlsrv_connect($serverName, $connectionOptions);
+        if ($conn === false) {
+            die(print_r(sqlsrv_errors(), true));
         }
-    } else{
+
+        $tsql = "UPDATE student SET password=?, email=?, phonenum=? WHERE username=?";
+        $params = array($password, $email, $phoneNumber, $_SESSION['user']);
+        $stmt = sqlsrv_query($conn, $tsql, $params);
+
+        if ($stmt === false) {
+            echo "Failed";
+            exit();
+        } else {
+            header('Location: st_update.php?status=success');
+            exit();
+        }
+    } else {
         header('Location: login.php');
+        exit();
     }
 }
 ?>
