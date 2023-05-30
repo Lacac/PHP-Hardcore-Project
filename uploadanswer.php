@@ -1,32 +1,45 @@
 <?php
 include "assign_list.php";
-$target_dir = "baitap/$target/";
+$target_dir = "baitap/";
+$target = "your_target_folder_name"; // Specify the target folder name
+$target_dir .= $target . "/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
-$pdfFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+$pdfFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+// Check if the target directory exists, create it if necessary
+if (!is_dir($target_dir)) {
+    mkdir($target_dir, 0755, true);
+}
+
+// Check if file already exists
 if (file_exists($target_file)) {
-  echo "Sorry, file already exists.";
-  $uploadOk = 0;
+    echo "Sorry, file already exists.";
+    $uploadOk = 0;
 }
-// Check file size
-if ($_FILES["fileToUpload"]["size"] > 99999999999999999999) {
-  echo "Sorry, your file is too large.";
-  $uploadOk = 0;
+
+// Check file size (100MB limit in this example)
+$maxFileSize = 100 * 1024 * 1024; // 100MB
+if ($_FILES["fileToUpload"]["size"] > $maxFileSize) {
+    echo "Sorry, your file is too large. Maximum file size is 100MB.";
+    $uploadOk = 0;
 }
-// Allow certain file formats
-if($pdfFileType != "pdf") {
-  echo "Xin loi ban chi duoc phep upload file pdf.";
-  $uploadOk = 0;
+
+// Allow only PDF file format
+if ($pdfFileType != "pdf") {
+    echo "Sorry, only PDF files are allowed.";
+    $uploadOk = 0;
 }
+
 // Check if $uploadOk is set to 0 by an error
 if ($uploadOk == 0) {
-  echo "Xin loi, file chua duoc upload thanh cong";
-// if everything is ok, try to upload file
+    echo "Sorry, your file was not uploaded.";
 } else {
-  if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-    echo "File ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " da duoc upload thanh cong.";
-  } else {
-    echo "Xin loi, da co van de khi upload file cua ban.";
-  }
+    // Try to upload the file
+    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+        echo "File " . htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded successfully.";
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
 }
 ?>
