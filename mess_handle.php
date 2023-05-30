@@ -1,44 +1,66 @@
-<?php 
+<?php
 session_start();
-if (!isset($_SESSION['teacher']) || !isset($_SESSION['student']))
-{
-    header('Location: list.php');  
-} 
-else{
-    // echo $_SESSION['id'].' and '.$_SESSION['user'].' and '.$_POST['message'];
-    $con8 = new mysqli("localhost","kali","kali","class");
-    if ($con8->connect_error) {
-        die("Connection failed: " . $con8->connect_error);
+
+if (!isset($_SESSION['teacher']) || !isset($_SESSION['student'])) {
+    header('Location: list.php');
+} else {
+    $serverName = "localhost";
+    $connectionOptions = array(
+        "Database" => "class",
+        "Uid" => "kali",
+        "PWD" => "kali"
+    );
+
+    // Establish MSSQL connection
+    $conn8 = sqlsrv_connect($serverName, $connectionOptions);
+    if ($conn8 === false) {
+        die(print_r(sqlsrv_errors(), true));
     }
-    $con9 = new mysqli("localhost","kali","kali","message");
-    if ($con9->connect_error) {
-        die("Connection failed: " . $con9->connect_error);
+
+    $conn9 = sqlsrv_connect($serverName, $connectionOptions);
+    if ($conn9 === false) {
+        die(print_r(sqlsrv_errors(), true));
     }
+
     $id = $_SESSION['id'];
     $x = 0;
     $arr = array();
-    $stmt = $con8->prepare("SELECT * FROM student WHERE id=?");
-    $stmt->bind_param("s", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    while ($row = $result->fetch_array(MYSQLI_NUM))
-    {
-        foreach ($row as $r)
-        {
-            $arr[$x] = "$r";
+
+    $query = "SELECT * FROM student WHERE id = ?";
+    $params = array($id);
+    $stmt = sqlsrv_query($conn8, $query, $params);
+
+    if ($stmt === false) {
+        die(print_r(sqlsrv_errors(), true));
+    }
+
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        foreach ($row as $r) {
+            $arr[$x] = $r;
             $x++;
         }
     }
+
+    sqlsrv_free_stmt($stmt);
+
     $sender = $_SESSION['user'];
     $content = $_POST['message'];
-    // echo $sender." and ".$content." to ".$arr[1];
-  
-    $sql = "INSERT INTO ".$arr[1]." (sender,content) VALUES ('$sender','$content')";
-    echo $sql;
-    if($con9->query($sql)){
-        header('Location: sendmess.php?status=success');
-    } else{
+
+    $table = $arr[1];
+
+    $query = "INSERT INTO $table (sender, content) VALUES (?, ?)";
+    $params = array($sender, $content);
+    $stmt = sqlsrv_query($conn9, $query, $params);
+
+    if ($stmt === false) {
         header('Location: sendmess.php?status=failed');
+        die(print_r(sqlsrv_errors(), true));
+    } else {
+        header('Location: sendmess.php?status=success');
     }
+
+    sqlsrv_free_stmt($stmt);
+    sqlsrv_close($conn8);
+    sqlsrv_close($conn9);
 }
 ?>
