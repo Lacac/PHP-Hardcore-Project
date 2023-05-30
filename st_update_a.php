@@ -36,21 +36,12 @@ if (isset($_POST['submit'])) {
             exit();
         }
 
-        // Update the student's profile in the database
-        // $serverName = "localhost";
-        // $connectionOptions = array(
-        //     "Database" => "class",
-        //     "Uid" => "kali",
-        //     "PWD" => "kali"
-        // );
-
-        // $conn = sqlsrv_connect($serverName, $connectionOptions);
         require 'permission.php';
             $u = "your_username";
             $p = "your_password";
             $permission = new permission($u, $p);
             $conn = $permission->connect_to_mssql();
-            
+
         if ($conn === false) {
             die(print_r(sqlsrv_errors(), true));
         }
