@@ -47,17 +47,34 @@ class permission {
         return $student;
     }
 
-    function connect_to_mssql($serverName, $database, $uid, $pwd) {
-        $connectionOptions = [
-            "Database" => $database,
-            "Uid" => $uid,
-            "PWD" => $pwd
-        ];
-        $conn = sqlsrv_connect($serverName, $connectionOptions);
-        if ($conn === false) {
-            die(print_r(sqlsrv_errors(), true));
-        }
-        return $conn;
-    }
+    // function connect_to_mssql($serverName, $database, $uid, $pwd) {
+    //     $connectionOptions = [
+    //         "Database" => $database,
+    //         "Uid" => $uid,
+    //         "PWD" => $pwd
+    //     ];
+    //     $conn = sqlsrv_connect($serverName, $connectionOptions);
+    //     if ($conn === false) {
+    //         die(print_r(sqlsrv_errors(), true));
+    //     }
+    //     return $conn;
+    // }
+
+    function connect_to_mssql() {
+		$serverName = "DESKTOP-NCJ03T3\MSSQLSERVER02";
+		$database = "php_hardcore_project";
+		$uid = "";
+		$pass = "";
+		$connectionOptions = [
+			"Database" => $database,
+			"Uid" => $uid,
+			"PWD" => $pass
+		];
+		$conn = sqlsrv_connect($serverName, $connectionOptions);
+		if ($conn === false) {
+			die(print_r(sqlsrv_errors(), true));
+		}
+		return $conn;
+	}
 }
 ?>
