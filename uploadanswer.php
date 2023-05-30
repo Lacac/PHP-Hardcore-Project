@@ -1,7 +1,7 @@
 <?php
 include "assign_list.php";
 $target_dir = "baitap/";
-$target = "your_target_folder_name"; // Specify the target folder name
+$target = "answer"; // Specify the target folder name
 $target_dir .= $target . "/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
