@@ -52,9 +52,16 @@
             <button type="submit" name="save" class="btn btn-success btn-lg btn-block">Add now</button>
         </div>
     </form>
-	 <p style="color: green"><?php if(isset($_GET['status']) && $_GET['status']=="success") { $comeback='<a href="index.php"><button type="button" class="btn btn-secondary">Come back to home page</button></a>'; echo "Adding successfully!"; } ?></p>
+	 <p style="color: green">
+     <?php 
+     $comeback = '';
+     if(isset($_GET['status']) && $_GET['status']=="success") { 
+       $comeback = '<a href="index.php"><button type="button" class="btn btn-secondary">Come back to home page</button></a>'; 
+       echo "Adding successfully!"; 
+     } 
+     ?>
+     </p>
     <?php echo $comeback; ?>
 </div>
 </body>
 </html>
-</body>
