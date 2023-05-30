@@ -18,9 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
     $hint = test_input($_POST["hint"]);
     //
-    if (!preg_match("/^[a-zA-Z0-9]*$/",$username)) {
-      $usernameErr = "Only letters and numbers allowed";
-    }
+    if (!preg_match("/^[a-zA-Z0-9]*$/", $hint)) {
+    $hintErr = "Only letters and numbers allowed";
+}
   }
 }
 function test_input($data) {
@@ -38,6 +38,7 @@ function test_input($data) {
               Hints:
             </p>
             <input type="text" name="hints"/>
+            <span class="error"><?php echo $hintErr; ?></span>
             <p>
               Please Upload text file</p>
             <p>
