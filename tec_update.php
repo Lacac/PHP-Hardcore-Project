@@ -1,16 +1,19 @@
 <?php
 session_start();
-if(!isset($_SESSION['teacher']) || !$_SESSION['teacher']  || !isset($_SESSION['user'])){
-  header('Location: login.php');
-} else{
-    if(empty($_SESSION['key'])){
-        $_SESSION['key'] = bin2hex(random_bytes(32));
-    }
-    $csrf = hash_hmac('sha256',$_SESSION['user'],$_SESSION['key']);
-    $_SESSION['csrf'] = $csrf;
+if (!isset($_SESSION['teacher']) || !$_SESSION['teacher'] || !isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit; // Terminate script execution after redirect
 }
 
+require_once 'permission.php'; // Include your database connection file
+
+if (empty($_SESSION['key'])) {
+    $_SESSION['key'] = bin2hex(random_bytes(32));
+}
+$csrf = hash_hmac('sha256', $_SESSION['user'], $_SESSION['key']);
+$_SESSION['csrf'] = $csrf;
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,41 +30,46 @@ if(!isset($_SESSION['teacher']) || !$_SESSION['teacher']  || !isset($_SESSION['u
 
 </head>
 <body>
-   <div class="signup-form">
+<div class="signup-form">
     <form action="tec_update_a.php" method="post">
-		<h2>Update student's profile</h2>
-    <input type="hidden" name="csrf" value="<?php echo $csrf;?>">
-    <div class="form-group">
-         <input type="text" class="form-control" name="username" placeholder="Username" required="required">
-		</div>  
-        <p style="color: red"><?php if(isset($_GET["username"]) && $_GET["username"]=="error") echo "Username must have lowercase characters (a-z) or numbers (0-9) or underscores(_), no special characters and length from 5 to 30!";?></p>  
-        <p style="color: red"><?php if(isset($_GET["status"]) && $_GET["status"]=="failed") echo "This username has already been existed!";?></p>
-      <div class="form-group">
-         <input type="text" class="form-control" name="fullname" placeholder="Full name" required="required">
-		</div>      
-        <p style="color: red"><?php if(isset($_GET["fullname"]) && $_GET["fullname"]=="error") echo "Full name must have characters (a-z or A-Z), start with uppercase and length from 5 to 30!";?>	
-      <div class="form-group">
-        	<input type="email" class="form-control" name="email" placeholder="Email" required="required">
-      </div>
-        <p style="color: red"><?php if(isset($_GET['email']) && $_GET['email']=="error") echo "Wrong email format!";?></p> 
-      <div class="form-group">
-         <input type="text" class="form-control" name="phonenum" placeholder="Phone Number" required="required">
-		</div>
-        <p style="color: red"><?php if(isset($_GET['phone']) && $_GET['phone']=="error") echo "Wrong phone number format (exactly 10 numbers)!";?></p> 
-		<div class="form-group">
+        <h2>Update student's profile</h2>
+        <input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf); ?>">
+        <div class="form-group">
+            <input type="text" class="form-control" name="username" placeholder="Username" required="required">
+        </div>
+        <p style="color: red"><?php if (isset($_GET["username"]) && $_GET["username"] == "error") echo "Username must have lowercase characters (a-z) or numbers (0-9) or underscores(_), no special characters and length from 5 to 30!"; ?></p>
+        <p style="color: red"><?php if (isset($_GET["status"]) && $_GET["status"] == "failed") echo "This username has already been existed!"; ?></p>
+        <div class="form-group">
+            <input type="text" class="form-control" name="fullname" placeholder="Full name" required="required">
+        </div>
+        <p style="color: red"><?php if (isset($_GET["fullname"]) && $_GET["fullname"] == "error") echo "Full name must have characters (a-z or A-Z), start with uppercase and length from 5 to 30!"; ?></p>
+        <div class="form-group">
+            <input type="email" class="form-control" name="email" placeholder="Email" required="required">
+        </div>
+        <p style="color: red"><?php if (isset($_GET['email']) && $_GET['email'] == "error") echo "Wrong email format!"; ?></p>
+        <div class="form-group">
+            <input type="text" class="form-control" name="phonenum" placeholder="Phone Number" required="required">
+        </div>
+        <p style="color: red"><?php if (isset($_GET['phone']) && $_GET['phone'] == "error") echo "Wrong phone number format (exactly 10 numbers)!"; ?></p>
+        <div class="form-group">
             <input type="password" class="form-control" name="pass" placeholder="Password" required="required">
         </div>
-        <p style="color: red"><?php if(isset($_GET['password']) && $_GET['password']=="error") echo "Password must have characters (a-z) or numbers (0-9) or underscores(_), length under 30!";?></p> 
-		<div class="form-group">
+        <p style="color: red"><?php if (isset($_GET['password']) && $_GET['password'] == "error") echo "Password must have characters (a-z) or numbers (0-9) or underscores(_), length under 30!"; ?></p>
+        <div class="form-group">
             <input type="password" class="form-control" name="cpass" placeholder="Confirm Password" required="required">
         </div>
-        <p style="color: red"><?php if(isset($_GET['confirm']) && $_GET['confirm']=="error") echo "Wrong confirmed password";?></p>       
-		<div class="form-group">
+        <p style="color: red"><?php if (isset($_GET['confirm']) && $_GET['confirm'] == "error") echo "Wrong confirmed password"; ?></p>
+        <div class="form-group">
             <button type="submit" name="submit" class="btn btn-success btn-lg btn-block">Update now</button>
         </div>
     </form>
-	 <p style="color: green"><?php if(isset($_GET['status']) && $_GET['status']=="success") { $comeback='<a href="index.php"><button type="button" class="btn btn-secondary">Come back to home page</button></a>'; echo "Updating successfully!"; } ?></p>
-    <?php echo $comeback; ?>
+    <p style="color: green"><?php
+        if (isset($_GET['status']) && $_GET['status'] == "success") {
+            $comeback = '<a href="index.php"><button type="button" class="btn btn-secondary">Come back to home page</button></a>';
+            echo "Updating successfully: " . htmlspecialchars($comeback);
+        }
+        ?></p>
+    <?php echo isset($comeback) ? $comeback : ''; ?>
 </div>
 </body>
 </html>
