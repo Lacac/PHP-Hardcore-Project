@@ -1,16 +1,27 @@
 <?php
 session_start();
-if(!isset($_SESSION['teacher']) || !$_SESSION['teacher']){
+if (!isset($_SESSION['teacher']) || !$_SESSION['teacher']) {
     // Redirect them to the login page
-    header("Location: login.php");  
+    header("Location: login.php");
+    exit; // Terminate the script after redirection
 }
+
 include 'assign_list.php';
+
 $fileList = glob("$mypath/*");
-foreach($fileList as $filename){
-    if(is_file($filename)){
-	$target = basename("$filename",".pdf").PHP_EOL;
-	$target1 = basename("$filename").PHP_EOL;
-        echo $target . '<a href="/baitap/' . $target . '/' . $target1 . '"> Download </a>','<br>';
-    }   
+
+if (count($fileList) > 0) {
+    foreach ($fileList as $filename) {
+        if (is_file($filename)) {
+            $target = basename("$filename", ".pdf");
+            $target1 = basename("$filename");
+            $downloadLink = '/baitap/' . $target . '/' . $target1;
+            $safeFileName = htmlspecialchars($target); // Sanitize the file name
+
+            echo $safeFileName . ' <a href="' . $downloadLink . '">Download</a><br>';
+        }
+    }
+} else {
+    echo 'No files found.';
 }
 ?>
