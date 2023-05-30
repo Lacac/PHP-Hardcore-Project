@@ -64,7 +64,6 @@ if (!isset($_SESSION['student']) || !$_SESSION['student'] || !isset($_SESSION['u
         echo "Updating successfully!";
       } ?>
     </p>
-    <?php echo $comeback; ?>
   </div>
 
   <!-- Moved JavaScript imports here -->
