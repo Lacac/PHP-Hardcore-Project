@@ -5,15 +5,15 @@ include "assign_list.php";
 // $target_dir .= $target . "/";
 // $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 // $uploadOk = 1;
-$target_dir = "baitap/$target/";
-$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+// $target_dir = "baitap/$target/";
+$target_file = $mypath . "/" . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
 
 $pdfFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
 // Check if the target directory exists, create it if necessary
-if (!is_dir($target_dir)) {
-    mkdir($target_dir, 0755, true);
+if (!is_dir($mypath)) {
+    mkdir($mypath, 0755, true);
 }
 
 // Check if file already exists
@@ -42,6 +42,10 @@ if ($uploadOk == 0) {
     // Try to upload the file
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
         echo "File " . htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded successfully.";
+        echo "<br>";
+        echo basename($_FILES["fileToUpload"]["name"]);
+        echo "<br>";
+        echo $target_file;
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
