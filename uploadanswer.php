@@ -1,10 +1,14 @@
 <?php
 include "assign_list.php";
-$target_dir = "baitap/";
-$target = "answer"; // Specify the target folder name
-$target_dir .= $target . "/";
+// $target_dir = "baitap/";
+// $target = "answer"; // Specify the target folder name
+// $target_dir .= $target . "/";
+// $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+// $uploadOk = 1;
+$target_dir = "baitap/$target/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
+
 $pdfFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
 // Check if the target directory exists, create it if necessary

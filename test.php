@@ -28,18 +28,8 @@ if ($pdfFileType != "pdf") {
 if ($uploadOk == 0) {
   $errors[] = "Sorry, the file was not uploaded.";
 } else {
-  // Create a folder with the file name
-  $folderName = pathinfo(basename($_FILES["fileToUpload"]["name"]), PATHINFO_FILENAME);
-  $folderPath = $target_dir . $folderName;
-
-  if (!file_exists($folderPath)) {
-    // Create the folder
-    mkdir($folderPath, 0777, true);
-  }
-
-  // Move the uploaded file to the folder
-  $destination = $folderPath . "/" . basename($_FILES["fileToUpload"]["name"]);
-  if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $destination)) {
+  // Try to upload the file
+  if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
     $message = "File " . htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded successfully.";
   } else {
     $errors[] = "Sorry, there was an error uploading your file.";
