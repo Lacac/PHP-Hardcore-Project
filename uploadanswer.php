@@ -7,7 +7,7 @@ include "assign_list.php";
 // $uploadOk = 1;
 // $target_dir = "baitap/$target/";
 $target_file = $mypath . "/" . basename($_FILES["fileToUpload"]["name"]);
-$uploadOk = 1;
+$uploadOk = 1; 
 
 $pdfFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
