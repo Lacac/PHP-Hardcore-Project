@@ -1,5 +1,6 @@
 <?php
 include "assign_list.php";
+include "submit.php";
 // $target_dir = "baitap/";
 // $target = "answer"; // Specify the target folder name
 // $target_dir .= $target . "/";
