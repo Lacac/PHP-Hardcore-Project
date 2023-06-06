@@ -23,7 +23,7 @@ if (count($fileList) > 0) {
         if (is_file($filename)) {
             $target = basename("$filename", ".pdf");
             $target1 = basename("$filename");
-            $downloadLink = '/baitap/' . $assignment . '/' . $target . '/' . $target1; // Update the download link with the assignment parameter
+            $downloadLink = '/PHP-Hardcore-Project' . '/baitap/' . $assignment . '/' . $target1; // Update the download link with the assignment parameter
             $safeFileName = htmlspecialchars($target); // Sanitize the file name
 
             echo $safeFileName . ' <a href="' . $downloadLink . '">Download</a><br>';
