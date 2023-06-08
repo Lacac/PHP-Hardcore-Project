@@ -9,16 +9,33 @@ class permission {
         $this->password = $p;
     }
 
+    // function is_teacher() {
+    //     $teacher = false;
+    //     $conn = $this->connect_to_mssql("LAPTOP-3GJTBRSD\DBS401NHOM2", "DBS_IA1601_GROUP2", "sa", "24062001");
+    //     $user = $this->username;
+    //     $pass = $this->password;
+    //     $tsql = "SELECT * FROM teacher WHERE username = ? AND password = ?";
+    //     $params = array($user, $pass);
+    //     $stmt = sqlsrv_query($conn, $tsql, $params);
+    //     if ($stmt === false) {
+    //         die(print_r(sqlsrv_errors(), true));
+    //     }
+    //     if (sqlsrv_fetch($stmt) === true) {
+    //         $teacher = true;
+    //     }
+    //     sqlsrv_free_stmt($stmt);
+    //     sqlsrv_close($conn);
+    //     return $teacher;
+    // }
     function is_teacher() {
         $teacher = false;
-        $conn = $this->connect_to_mssql("DESKTOP-NCJ03T3\MSSQLSERVER02", "php_hardcore_project", "", "");
+        $conn = $this->connect_to_mssql("LAPTOP-3GJTBRSD\DBS401NHOM2", "DBS_IA1601_GROUP2", "sa", "24062001");
         $user = $this->username;
         $pass = $this->password;
-//    	$tsql = "SELECT * FROM teacher WHERE username = ? AND password = ?";
-//         $params = array($user, $pass);
-//         $stmt = sqlsrv_query($conn, $tsql, $params);
-	 // Lỗ hổng SQL Injection: Không sử dụng tham số an toàn
+
+        // Lỗ hổng SQL Injection: Không sử dụng tham số an toàn
         $tsql = "SELECT * FROM teacher WHERE username = '$user' AND password = '$pass'";
+
         $stmt = sqlsrv_query($conn, $tsql);
         if ($stmt === false) {
             die(print_r(sqlsrv_errors(), true));
@@ -33,7 +50,7 @@ class permission {
 
     function is_student() {
         $student = false;
-        $conn = $this->connect_to_mssql("DESKTOP-NCJ03T3\MSSQLSERVER02", "php_hardcore_project", "", "");
+        $conn = $this->connect_to_mssql("LAPTOP-3GJTBRSD\DBS401NHOM2", "DBS_IA1601_GROUP2", "sa", "24062001");
         $user = $this->username;
         $pass = $this->password;
         $tsql = "SELECT * FROM student WHERE username = ? AND password = ?";
@@ -50,11 +67,12 @@ class permission {
         return $student;
     }
     
+    
     function connect_to_mssql() {
-		$serverName = "DESKTOP-NCJ03T3\MSSQLSERVER02";
-		$database = "php_hardcore_project";
-		$uid = "";
-		$pass = "";
+		$serverName = "LAPTOP-3GJTBRSD\DBS401NHOM2";
+		$database = "DBS_IA1601_GROUP2";
+		$uid = "sa";
+		$pass = "24062001";
 		$connectionOptions = [
 			"Database" => $database,
 			"Uid" => $uid,
