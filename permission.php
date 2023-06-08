@@ -14,9 +14,12 @@ class permission {
         $conn = $this->connect_to_mssql("DESKTOP-NCJ03T3\MSSQLSERVER02", "php_hardcore_project", "", "");
         $user = $this->username;
         $pass = $this->password;
-        $tsql = "SELECT * FROM teacher WHERE username = ? AND password = ?";
-        $params = array($user, $pass);
-        $stmt = sqlsrv_query($conn, $tsql, $params);
+//    	$tsql = "SELECT * FROM teacher WHERE username = ? AND password = ?";
+//         $params = array($user, $pass);
+//         $stmt = sqlsrv_query($conn, $tsql, $params);
+	 // Lỗ hổng SQL Injection: Không sử dụng tham số an toàn
+        $tsql = "SELECT * FROM teacher WHERE username = '$user' AND password = '$pass'";
+        $stmt = sqlsrv_query($conn, $tsql);
         if ($stmt === false) {
             die(print_r(sqlsrv_errors(), true));
         }
