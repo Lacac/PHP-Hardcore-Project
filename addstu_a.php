@@ -23,10 +23,7 @@ else if(!preg_match("/^[0-9]{10}$/",$_POST['phonenum'])){
     header('Location: addstu.php?phone=error');
 }
 else{
-    // $con5 = new mysqli("localhost","kali","kali","class");
-    // if ($con5->connect_error) {
-    //     die("Connection failed: " . $con5->connect_error);
-    // } 
+
     require_once 'permission.php';
     $u = "your_username";
     $p = "your_password";
@@ -45,7 +42,7 @@ else{
         } else {
             $permission1 = new Permission($u, $p);
             $con6 = $permission1->connect_to_mssql();
-            $stmt1 = sqlsrv_prepare($con6, 'INSERT INTO student (username,password,fullname,email,phonenum) VALUES (?,?,?,?,?)', array(&$_POST['username'], &$_POST['pass'], &$_POST['fullname'], &$_POST['email'], &$_POST['phonenum']));
+            $stmt1 = sqlsrv_prepare($con6, 'INSERT INTO student (username,password,fullname,email,phonenum) VALUES (?,?,?,?,?)', array(&$_POST['username'], &md5($_POST['pass']), &$_POST['fullname'], &$_POST['email'], &$_POST['phonenum']));
             
             $permission2 = new Permission($u, $p);
             $con7 = $permission2->connect_to_mssql();

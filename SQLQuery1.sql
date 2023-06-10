@@ -4,7 +4,7 @@ use php_hardcore_project;
 
 create table Student(
 username varchar(30),
-password varchar(30) not null,
+password varchar(40) not null,
 fullname varchar(30),
 email varchar(30),
 phonenum varchar(10),
@@ -14,7 +14,7 @@ id int IDENTITY(1,1) primary key,
 create table Teacher(
 id int IDENTITY(1,1),
 username varchar(30),
-password varchar(30) not null,
+password varchar(40) not null,
 primary key(id, password),
 )
 
