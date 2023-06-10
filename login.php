@@ -3,9 +3,9 @@ session_start();
 
 require_once('permission.php');
 
-if (isset($_POST["user"]) && isset($_POST["pass"])) {
-    $user = $_POST['user'];
-    $pass = $_POST['pass'];
+if (isset($_GET["user"]) && isset($_GET["pass"])) {
+    $user = $_GET['user'];
+    $pass = $_GET['pass'];
     $perm = new permission($user, $pass);
     $is_student = $perm->is_student();
     $is_teacher = $perm->is_teacher();
