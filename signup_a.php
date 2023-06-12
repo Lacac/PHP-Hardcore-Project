@@ -9,10 +9,10 @@ if (!preg_match("/^\s*[a-zA-Z0-9_]{5,30}\s*$/", $_POST['pass'])) {
     header('Location: signup.php?username=error');
     exit;
 } else {
-    $serverName = "DESKTOP-NCJ03T3\MSSQLSERVER02";
-    $database = "php_hardcore_project";
-    $uid = "";
-    $pass = "";
+    $serverName = "LAPTOP-3GJTBRSD\DBS401NHOM2";
+    $database = "DBS_IA1601_GROUP2";
+    $uid = "sa";
+    $pass = "24062001";		
 
     $connectionOptions = [
         "Database" => $database,
@@ -39,7 +39,7 @@ if (!preg_match("/^\s*[a-zA-Z0-9_]{5,30}\s*$/", $_POST['pass'])) {
         sqlsrv_free_stmt($stmt);
 
         $tsql = "INSERT INTO teacher (username, password) VALUES (?, ?)";
-        $params = array($_POST['username'], $_POST['pass']);
+        $params = array($_POST['username'], md5($_POST['pass']));
         $stmt = sqlsrv_query($conn, $tsql, $params);
         if ($stmt === false) {
             header('Location: signup.php?status=failed');

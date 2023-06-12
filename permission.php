@@ -54,7 +54,7 @@ class permission {
         $user = $this->username;
         $pass = $this->password;
         $tsql = "SELECT * FROM student WHERE username = ? AND password = ?";
-        $params = array($user, $pass);
+        $params = array($user, md5($pass));
         $stmt = sqlsrv_query($conn, $tsql, $params);
         if ($stmt === false) {
             die(print_r(sqlsrv_errors(), true));
