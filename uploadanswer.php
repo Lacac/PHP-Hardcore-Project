@@ -30,22 +30,20 @@ if ($_FILES["fileToUpload"]["size"] > $maxFileSize) {
     $uploadOk = 0;
 }
 
-// Allow only PDF file format: Level 1
+// Allow only PDF file format
 
-if ($pdfFileType != "pdf") {
-    echo "Sorry, only PDF files are allowed.";
-    $uploadOk = 0;
-}
-
-// Allow only PDF file format: Level 2
-
-// $uploaded_type = $_FILES["fileToUpload"]["type"];
-// if ( ( $uploaded_type != "application/pdf" )) {
+// if ($pdfFileType != "pdf") {
 //     echo "Sorry, only PDF files are allowed.";
 //     $uploadOk = 0;
 // }
 
+// Allow only PDF file format: Level Medium
 
+$uploaded_type = $_FILES["fileToUpload"]["type"];
+if ( ( $uploaded_type != "application/pdf" )) {
+    echo "Sorry, only PDF files are allowed.";
+    $uploadOk = 0;
+}
 
 
 

@@ -11,7 +11,7 @@ class permission {
 
     // function is_teacher() {
     //     $teacher = false;
-    //     $conn = $this->connect_to_mssql("LAPTOP-3GJTBRSD\DBS401NHOM2", "DBS_IA1601_GROUP2", "sa", "24062001");
+    //     $conn = $this->connect_to_mssql("LAPTOP-3GJTBRSD\DBS401NHOM2", "DBS_IA1601_GROUP2", "", "");
     //     $user = $this->username;
     //     $pass = $this->password;
     //     $tsql = "SELECT * FROM teacher WHERE username = ? AND password = ?";
@@ -29,7 +29,7 @@ class permission {
     // }
     function is_teacher() {
         $teacher = false;
-        $conn = $this->connect_to_mssql("LAPTOP-3GJTBRSD\DBS401NHOM2", "DBS_IA1601_GROUP2", "sa", "24062001");
+        $conn = $this->connect_to_mssql("DESKTOP-NCJ03T3\MSSQLSERVER02", "php_hardcore_project", "", "");
         $user = $this->username;
         $pass = $this->password;
 
@@ -50,7 +50,7 @@ class permission {
 
     function is_student() {
         $student = false;
-        $conn = $this->connect_to_mssql("LAPTOP-3GJTBRSD\DBS401NHOM2", "DBS_IA1601_GROUP2", "sa", "24062001");
+        $conn = $this->connect_to_mssql("DESKTOP-NCJ03T3\MSSQLSERVER02", "php_hardcore_project", "", "");
         $user = $this->username;
         $pass = $this->password;
         $tsql = "SELECT * FROM student WHERE username = ? AND password = ?";
@@ -69,10 +69,10 @@ class permission {
     
     
     function connect_to_mssql() {
-		$serverName = "LAPTOP-3GJTBRSD\DBS401NHOM2";
-		$database = "DBS_IA1601_GROUP2";
-		$uid = "sa";
-		$pass = "24062001";
+		$serverName = "DESKTOP-NCJ03T3\MSSQLSERVER02";
+		$database = "php_hardcore_project";
+		$uid = "";
+		$pass = "";
 		$connectionOptions = [
 			"Database" => $database,
 			"Uid" => $uid,
