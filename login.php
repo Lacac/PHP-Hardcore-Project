@@ -3,9 +3,9 @@ session_start();
 
 require_once('permission.php');
 
-if (isset($_GET["user"]) && isset($_GET["pass"])) {
-    $user = $_GET['user'];
-    $pass = $_GET['pass'];
+if (isset($_POST["user"]) && isset($_POST["pass"])) {
+    $user = $_POST['user'];
+    $pass = $_POST['pass'];
     $perm = new permission($user, $pass);
     $is_student = $perm->is_student();
     $is_teacher = $perm->is_teacher();
@@ -46,7 +46,7 @@ if (isset($_GET["user"]) && isset($_GET["pass"])) {
                 <div class="card-body">
                     <h5 class="card-title text-center">Sign In</h5>
                     <?php if (isset($msg)) echo $msg; ?>
-                    <form class="form-signin" action="login.php" method="get">
+                    <form class="form-signin" action="login.php" method="post">
 
                         <div class="form-label-group">
                             <input type="text" id="user" name="user" class="form-control" placeholder="Username"

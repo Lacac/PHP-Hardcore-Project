@@ -32,9 +32,9 @@ class permission {
         $conn = $this->connect_to_mssql("LAPTOP-3GJTBRSD\DBS401NHOM2", "DBS_IA1601_GROUP2", "sa", "24062001");
         $user = $this->username;
         $pass = $this->password;
-
+        $hashedPassword = md5($pass);
         // Lỗ hổng SQL Injection: Không sử dụng tham số an toàn
-        $tsql = "SELECT * FROM teacher WHERE username = '$user' AND password = '$pass'";
+        $tsql = "SELECT * FROM teacher WHERE username = '$user' AND password = '$hashedPassword'";
 
         $stmt = sqlsrv_query($conn, $tsql);
         if ($stmt === false) {
@@ -54,7 +54,7 @@ class permission {
         $user = $this->username;
         $pass = $this->password;
         $tsql = "SELECT * FROM student WHERE username = ? AND password = ?";
-        $params = array($user, md5($pass));
+        $params = array($user, $pass);
         $stmt = sqlsrv_query($conn, $tsql, $params);
         if ($stmt === false) {
             die(print_r(sqlsrv_errors(), true));
