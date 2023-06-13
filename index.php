@@ -18,7 +18,7 @@ if (!isset($_SESSION['teacher']) || !isset($_SESSION['student'])) {
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-<h1><?php echo "Welcome " . $_SESSION['user'] . " to our class!"; ?></h1>
+<h1><?php echo "Welcome " . $_SESSION['user'] . " to our class!";?></h1>
 ​
 <a href='list.php'><button type="button" class="btn btn-secondary btn-lg btn-block btn-success">List of students
 </button></a>

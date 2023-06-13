@@ -39,7 +39,7 @@ if (!preg_match("/^\s*[a-zA-Z0-9_]{5,30}\s*$/", $_POST['pass'])) {
         sqlsrv_free_stmt($stmt);
 
         $tsql = "INSERT INTO teacher (username, password) VALUES (?, ?)";
-        $params = array($_POST['username'], md5($_POST['pass']));
+        $params = array($_POST['username'], $_POST['pass']);
         $stmt = sqlsrv_query($conn, $tsql, $params);
         if ($stmt === false) {
             header('Location: signup.php?status=failed');
