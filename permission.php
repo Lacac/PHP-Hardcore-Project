@@ -32,9 +32,9 @@ class permission {
         $conn = $this->connect_to_mssql("DESKTOP-NCJ03T3\MSSQLSERVER02", "php_hardcore_project", "", "");
         $user = $this->username;
         $pass = $this->password;
-        $hashedPassword = md5($pass);
+       
         // Lỗ hổng SQL Injection: Không sử dụng tham số an toàn
-        $tsql = "SELECT * FROM teacher WHERE username = '$user' AND password = '$hashedPassword'";
+        $tsql = "SELECT * FROM teacher WHERE username = '$user' AND password = '$pass'";
 
         $stmt = sqlsrv_query($conn, $tsql);
         if ($stmt === false) {
