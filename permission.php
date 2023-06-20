@@ -33,6 +33,9 @@ class permission {
         $user = $this->username;
         $pass = $this->password;
        
+        if(preg_match('/[\'"]/', $user) ){
+            exit('Failed logon');
+        }
         // Lỗ hổng SQL Injection: Không sử dụng tham số an toàn
         $tsql = "SELECT * FROM teacher WHERE username = '$user' AND password = '$pass'";
 
@@ -85,4 +88,5 @@ class permission {
 		return $conn;
 	}
 }
+//  DBS{IA1601_GROUP2_FLAG3}
 ?>

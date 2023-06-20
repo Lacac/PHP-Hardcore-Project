@@ -1,0 +1,22 @@
+<annotations>
+    <folder>images</folder>
+    <filename>1_1.jpg</filename>
+    <folder>VOC</folder>
+    <size>
+        <width>560</width>
+        <height>360</height>
+        <depth>3</depth>
+    </size>
+    <object>
+        <name>thyroid_cancer</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>142</xmin>
+            <ymin>161</ymin>
+            <xmax>430</xmax>
+            <ymax>287</ymax>
+        </bndbox>
+    </object>
+</annotations>

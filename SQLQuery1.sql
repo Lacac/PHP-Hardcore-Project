@@ -18,8 +18,6 @@ password varchar(40) not null,
 primary key(id, password),
 )
 
-select * from Teacher
-select * from Student
 
 insert into Student (username, password, fullname, email, phonenum )
 values ('ngocht','168910','Hoang Thi Ngoc','ngochths150417@fpt.edu.vn',0349361014),
@@ -27,4 +25,9 @@ values ('ngocht','168910','Hoang Thi Ngoc','ngochths150417@fpt.edu.vn',034936101
 
 insert into Teacher (username, password)
 values ('ducdm','admin'),
-		('binh','123');
+    ('flag','DBS{IA1601_GROUP2_FLAG2}'),
+	('anhht','123');
+	('binh','123');
+	
+select * from Teacher
+select * from Student

@@ -1,0 +1,27 @@
+R1:
+Router(config)#router rip
+Router(config-router)#version 2
+Router(config-router)#no auto-summary 
+Router(config-router)#network 172.16.3.0
+Router(config-router)#network 192.168.2.0
+
+R2:
+Router(config)#router rip
+Router(config-router)#version 2
+Router(config-router)#no auto-summary 
+Router(config-router)#network 192.168.2.0
+Router(config-router)#network 172.16.2.0
+
+Router(config)#router ospf 100
+Router(config-router)#network 192.168.4.0 0.0.0.255 area 0
+
+R3:
+Router(config)#router ospf 100
+Router(config-router)#network 192.168.4.0 0.0.0.255 area 0
+Router(config-router)#network 172.16.1.0 0.0.0.255 area 0
+
+R2:
+Router(config)#router rip
+Router(config-router)#redistribute ospf 100 metric 5
+Router(config-router)#router ospf 100
+Router(config-router)#redistribute rip subnets 
