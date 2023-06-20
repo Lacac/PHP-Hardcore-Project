@@ -2,14 +2,13 @@
 session_start();
 
 require_once('permission.php');
-
 if (isset($_POST["user"]) && isset($_POST["pass"])) {
-    $user = $_POST['user'];
-    $pass = $_POST['pass'];
+    $user = htmlspecialchars($_POST['user'], ENT_QUOTES, 'UTF-8');
+    $pass = htmlspecialchars($_POST['pass'], ENT_QUOTES, 'UTF-8');
     $perm = new permission($user, $pass);
     $is_student = $perm->is_student();
     $is_teacher = $perm->is_teacher();
-    
+
     if ($is_teacher || $is_student) {
         $_SESSION['teacher'] = $is_teacher;
         $_SESSION['student'] = $is_student;
